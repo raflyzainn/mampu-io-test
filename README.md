@@ -43,6 +43,19 @@ npm run dev
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
+### Environment Variables
+
+The project uses environment variables for configuration. Copy `.env.example` to `.env.local` and update if needed:
+
+```bash
+cp .env.example .env.local
+```
+
+**Available Variables:**
+- `NEXT_PUBLIC_API_BASE` - Base URL for the API (default: `https://jsonplaceholder.typicode.com`)
+
+**Note:** Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser.
+
 ## Usage
 
 ### Pages

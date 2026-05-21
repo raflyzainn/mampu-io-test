@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, useMemo } from 'react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useUsers } from '@/hooks/useApi';
 import { applyUserFilters } from '@/lib/users';
@@ -72,6 +73,14 @@ export default function UsersPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 dark:bg-gray-950 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
+        {/* Back Button */}
+        <Link
+          href="/"
+          className="mb-6 inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
+        >
+          ← Back to Home
+        </Link>
+
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             Users

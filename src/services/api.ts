@@ -1,6 +1,6 @@
 import { User, Post, Todo, UserActivitySignals } from '@/types';
 
-const API_BASE = 'https://jsonplaceholder.typicode.com';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://jsonplaceholder.typicode.com';
 
 export async function fetchUsers(): Promise<User[]> {
   try {
