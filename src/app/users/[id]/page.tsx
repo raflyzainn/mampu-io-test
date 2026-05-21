@@ -1,5 +1,7 @@
+import { Suspense } from 'react';
 import { fetchUserById, fetchPostsByUserId, fetchTodosByUserId } from '@/services/api';
 import { UserDetailContent } from '@/components/UserDetailContent';
+import { UserDetailSkeleton } from '@/components/Skeleton';
 import { notFound } from 'next/navigation';
 
 interface UserDetailPageProps {
@@ -46,10 +48,12 @@ export default async function UserDetailPage({ params }: UserDetailPageProps) {
   }
 
   return (
-    <UserDetailContent
-      user={data.user}
-      posts={data.posts}
-      todos={data.todos}
-    />
+    <Suspense fallback={<UserDetailSkeleton />}>
+      <UserDetailContent
+        user={data.user}
+        posts={data.posts}
+        todos={data.todos}
+      />
+    </Suspense>
   );
 }
