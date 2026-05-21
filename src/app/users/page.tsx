@@ -1,12 +1,13 @@
 'use client';
 
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useUsers } from '@/hooks/useApi';
 import { applyUserFilters } from '@/lib/users';
 import { UserFilters } from '@/components/UserFilters';
 import { UserTable } from '@/components/UserTable';
+import { ColumnToggle, type ColumnKey } from '@/components/ColumnToggle';
 import { UserCard } from '@/components/UserCard';
 import { UserCardsSkeleton, UserTableSkeleton } from '@/components/Skeleton';
 import { EmptyState } from '@/components/EmptyState';
@@ -15,6 +16,7 @@ import { ErrorState } from '@/components/ErrorState';
 function UsersListContent() {
   const searchParams = useSearchParams();
   const { data: users, isLoading, error } = useUsers();
+  const [visibleColumns, setVisibleColumns] = useState<ColumnKey[]>(['name', 'email', 'city', 'posts', 'todos']);
 
   const searchTerm = searchParams.get('search') || '';
   const sortBy = (searchParams.get('sortBy') || 'name') as 'name' | 'email';
@@ -33,7 +35,12 @@ function UsersListContent() {
 
   return (
     <div>
-      <UserFilters searchTerm={searchTerm} sortBy={sortBy} sortOrder={sortOrder} />
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <UserFilters searchTerm={searchTerm} sortBy={sortBy} sortOrder={sortOrder} />
+        <div className="hidden sm:block">
+          <ColumnToggle visibleColumns={visibleColumns} onColumnsChange={setVisibleColumns} />
+        </div>
+      </div>
 
       {isLoading ? (
         isMobile ? (
@@ -54,7 +61,7 @@ function UsersListContent() {
         <>
           {/* Desktop: Table View */}
           <div className="hidden md:block">
-            <UserTable users={filteredUsers} />
+            <UserTable users={filteredUsers} visibleColumns={visibleColumns} />
           </div>
 
           {/* Mobile: Card View */}
@@ -71,22 +78,26 @@ function UsersListContent() {
 
 export default function UsersPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 dark:bg-gray-950 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100 py-12 px-4 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         {/* Back Button */}
         <Link
           href="/"
-          className="mb-6 inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
+          className="mb-8 inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-blue-600 transition-all hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20"
         >
-          ← Back to Home
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Home
         </Link>
 
+        {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-            Users
+            Users Directory
           </h1>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Browse and manage users, view their posts and todos
+            Manage and explore all users, their posts and todos
           </p>
         </div>
 
